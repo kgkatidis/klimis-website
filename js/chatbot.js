@@ -15,7 +15,7 @@
   var css = [
     /* === FAB button === */
     '#kg-fab {',
-    '  position: fixed; bottom: 28px; right: 28px;',
+    '  position: fixed; bottom: 110px; right: 28px;',
     '  width: 60px; height: 60px; border-radius: 50%;',
     '  background: linear-gradient(135deg, #F96D00, #d95c00);',
     '  border: none; cursor: pointer;',
@@ -33,7 +33,7 @@
 
     /* === Panel === */
     '#kg-panel {',
-    '  position: fixed; bottom: 102px; right: 28px;',
+    '  position: fixed; bottom: 184px; right: 28px;',
     '  width: 330px;',
     '  background: #f5f9f7; border-radius: 22px;',
     '  box-shadow: 0 16px 48px rgba(30,60,50,0.16), 0 2px 10px rgba(30,60,50,0.08);',
@@ -167,8 +167,8 @@
 
     /* === Mobile === */
     '@media (max-width: 420px) {',
-    '  #kg-panel { width: calc(100vw - 24px); right: 12px; bottom: 88px; }',
-    '  #kg-fab   { right: 16px; bottom: 16px; }',
+    '  #kg-panel { width: calc(100vw - 24px); right: 12px; bottom: 170px; }',
+    '  #kg-fab   { right: 16px; bottom: 100px; }',
     '}'
   ].join('\n');
 
