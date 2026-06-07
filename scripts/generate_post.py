@@ -470,7 +470,7 @@ def update_sitemap(sitemap_path: Path, filename: str, date_str: str):
 
 def fetch_unsplash_image(slug: str, images_dir: Path) -> str:
     """Download a random psychology image from Unsplash. Returns relative path or None."""
-    access_key = os.environ.get("UNSPLASH_ACCESS_KEY", "").strip()
+    access_key = re.sub(r'\s+', '', os.environ.get("UNSPLASH_ACCESS_KEY", ""))
     if not access_key:
         return None
 
