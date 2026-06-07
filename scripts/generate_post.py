@@ -112,33 +112,40 @@ def save_state(state_file: Path, state: dict):
 def generate_article(topic: str, client: anthropic.Anthropic) -> dict:
     prompt = f"""Γράψε ένα πλήρες άρθρο blog στα ελληνικά για ψυχολόγο στη Θεσσαλονίκη με θέμα: "{topic}"
 
-Επέστρεψε ΜΟΝΟ ένα έγκυρο JSON αντικείμενο με αυτή ακριβώς τη δομή:
+Επέστρεψε ΜΟΝΟ ένα έγκυρο JSON αντικείμενο. ΠΡΟΣΟΧΗ: Στο body_html ΜΗΝ χρησιμοποιείς διπλά εισαγωγικά (") μέσα σε attributes HTML — χρησιμοποίησε μόνο απλά (') ή αποφύγε τα attributes.
+
 {{
-  "title": "Τίτλος άρθρου (μέχρι 70 χαρακτήρες)",
-  "meta_description": "SEO περιγραφή 140-160 χαρακτήρων που περιέχει τις λέξεις ψυχολόγος Θεσσαλονίκη",
+  "title": "Τίτλος άρθρου μέχρι 70 χαρακτήρες",
+  "meta_description": "SEO περιγραφή 140-160 χαρακτήρων με τις λέξεις ψυχολόγος Θεσσαλονίκη",
   "excerpt": "Σύντομη περίληψη 2 προτάσεων για κάρτα blog",
-  "keywords": "λέξη1, λέξη2, λέξη3, λέξη4, ψυχολόγος θεσσαλονίκη",
+  "keywords": "λέξη1, λέξη2, λέξη3, ψυχολόγος θεσσαλονίκη",
   "tags": ["Ετικέτα1", "Ετικέτα2", "Ετικέτα3"],
-  "body_html": "Πλήρες HTML άρθρο τουλάχιστον 600 λέξεων. Χρησιμοποίησε <h2>, <p>, <ul><li>. Ξεκίνα με <h2>. Χωρίς <html>/<body>/<head> tags."
+  "body_html": "HTML άρθρο 600+ λέξεων με <h2>, <p>, <ul><li>. Ξεκίνα με <h2>. Χωρίς <html><body><head>. Χωρίς διπλά εισαγωγικά σε attributes."
 }}
 
 Κανόνες:
-- Επαγγελματική ελληνική γλώσσα, κατανοητή από το ευρύ κοινό
-- Ζεστός, ειδικός τόνος — χωρίς ιατρικές συνταγές
-- Χρησιμοποίησε "ψυχολόγος Θεσσαλονίκη" ή "στη Θεσσαλονίκη" φυσικά 2-3 φορές
-- Κλείσε με πρόσκληση για τηλεφωνική επικοινωνία (ΟΧΙ email)
-- Μόνο JSON — χωρίς markdown backticks ή άλλο κείμενο"""
+- Επαγγελματική ελληνική, κατανοητή από το κοινό
+- Ζεστός τόνος, χωρίς ιατρικές συνταγές
+- Φυσική χρήση "ψυχολόγος Θεσσαλονίκη" 2-3 φορές
+- Κλείσε με πρόσκληση για τηλεφωνική επικοινωνία
+- ΜΟΝΟ JSON, χωρίς backticks"""
 
-    message = client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=4096,
-        messages=[{"role": "user", "content": prompt}]
-    )
-
-    raw = message.content[0].text.strip()
-    raw = re.sub(r'^```(?:json)?\s*', '', raw)
-    raw = re.sub(r'\s*```$', '', raw)
-    return json.loads(raw)
+    for attempt in range(3):
+        message = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=4096,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        raw = message.content[0].text.strip()
+        raw = re.sub(r'^```(?:json)?\s*', '', raw)
+        raw = re.sub(r'\s*```$', '', raw)
+        try:
+            return json.loads(raw)
+        except json.JSONDecodeError as e:
+            print(f"JSON parse error (attempt {attempt+1}/3): {e}")
+            if attempt == 2:
+                raise
+    raise RuntimeError("Αδύνατη η παραγωγή άρθρου μετά από 3 προσπάθειες")
 
 
 # ---------------------------------------------------------------------------
