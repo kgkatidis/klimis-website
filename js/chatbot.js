@@ -1,11 +1,7 @@
 (function () {
   'use strict';
 
-  // Replace with your Cloudflare Worker URL after deployment
   var WORKER_URL = 'https://klimis-chatbot.kgkatidis.workers.dev';
-
-  var ACCENT = '#F96D00';
-  var DARK   = '#343a40';
 
   var SUGGESTIONS = [
     'Τι είναι η ΓΣΘ;',
@@ -16,91 +12,169 @@
 
   var WELCOME = 'Γεια σας! Είμαι ο AI βοηθός του Κλήμη Γιαμουρίδη. Μπορώ να απαντήσω σε ερωτήσεις για τις υπηρεσίες, τη θεραπεία ή πώς να κλείσετε ραντεβού. Πώς μπορώ να βοηθήσω;';
 
-  var css = '\
-    #kg-fab {\
-      position: fixed; bottom: 24px; right: 24px;\
-      width: 56px; height: 56px; border-radius: 50%;\
-      background: ' + ACCENT + '; border: none; cursor: pointer;\
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3);\
-      z-index: 9999; display: flex; align-items: center; justify-content: center;\
-      transition: transform 0.2s;\
-    }\
-    #kg-fab:hover { transform: scale(1.08); }\
-    #kg-fab svg { width: 26px; height: 26px; fill: #fff; }\
-    #kg-panel {\
-      position: fixed; bottom: 92px; right: 24px;\
-      width: 320px; height: 460px;\
-      background: #fff; border-radius: 16px;\
-      box-shadow: 0 8px 32px rgba(0,0,0,0.18);\
-      z-index: 9998; display: none; flex-direction: column;\
-      overflow: hidden; font-family: Roboto, sans-serif;\
-    }\
-    #kg-panel.kg-open { display: flex; }\
-    #kg-hdr {\
-      background: ' + DARK + '; color: #fff;\
-      padding: 12px 14px; display: flex; align-items: center; gap: 10px;\
-    }\
-    #kg-hdr img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }\
-    #kg-hdr-text { flex: 1; }\
-    #kg-hdr-name { font-weight: 600; font-size: 14px; }\
-    #kg-hdr-sub  { font-size: 11px; color: rgba(255,255,255,0.65); }\
-    #kg-x { background: none; border: none; color: #fff; cursor: pointer; font-size: 22px; line-height: 1; padding: 0; }\
-    #kg-msgs {\
-      flex: 1; overflow-y: auto; padding: 14px 12px;\
-      display: flex; flex-direction: column; gap: 10px;\
-    }\
-    .kg-m {\
-      max-width: 82%; padding: 9px 13px;\
-      border-radius: 14px; font-size: 13px; line-height: 1.55;\
-    }\
-    .kg-m.kg-bot { background: #f0f2f5; color: #222; align-self: flex-start; border-bottom-left-radius: 4px; }\
-    .kg-m.kg-usr { background: ' + ACCENT + '; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }\
-    #kg-typing {\
-      display: flex; gap: 4px; align-items: center;\
-      padding: 10px 14px; background: #f0f2f5;\
-      border-radius: 14px; border-bottom-left-radius: 4px;\
-      align-self: flex-start;\
-    }\
-    #kg-typing span {\
-      width: 7px; height: 7px; background: #aaa;\
-      border-radius: 50%; animation: kg-b 1.2s infinite;\
-    }\
-    #kg-typing span:nth-child(2) { animation-delay: 0.2s; }\
-    #kg-typing span:nth-child(3) { animation-delay: 0.4s; }\
-    @keyframes kg-b {\
-      0%,60%,100% { transform: translateY(0); }\
-      30% { transform: translateY(-6px); }\
-    }\
-    #kg-chips { padding: 0 12px 8px; display: flex; flex-wrap: wrap; gap: 6px; }\
-    .kg-chip {\
-      background: #fff; border: 1px solid ' + ACCENT + ';\
-      color: ' + ACCENT + '; border-radius: 16px;\
-      padding: 5px 11px; font-size: 12px; cursor: pointer;\
-      transition: background 0.15s; font-family: inherit;\
-    }\
-    .kg-chip:hover { background: ' + ACCENT + '; color: #fff; }\
-    #kg-row {\
-      display: flex; padding: 10px 12px;\
-      border-top: 1px solid #eee; gap: 8px;\
-    }\
-    #kg-inp {\
-      flex: 1; border: 1px solid #ddd; border-radius: 20px;\
-      padding: 8px 14px; font-size: 13px; outline: none;\
-      font-family: inherit;\
-    }\
-    #kg-inp:focus { border-color: ' + ACCENT + '; }\
-    #kg-btn {\
-      width: 36px; height: 36px; background: ' + ACCENT + ';\
-      border: none; border-radius: 50%; cursor: pointer;\
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;\
-    }\
-    #kg-btn svg { width: 16px; height: 16px; fill: #fff; }\
-    #kg-btn:disabled { background: #ccc; cursor: not-allowed; }\
-    @media (max-width: 400px) {\
-      #kg-panel { width: calc(100vw - 20px); right: 10px; bottom: 82px; }\
-      #kg-fab   { right: 14px; bottom: 14px; }\
-    }\
-  ';
+  var css = [
+    /* === FAB button === */
+    '#kg-fab {',
+    '  position: fixed; bottom: 28px; right: 28px;',
+    '  width: 60px; height: 60px; border-radius: 50%;',
+    '  background: linear-gradient(135deg, #F96D00, #d95c00);',
+    '  border: none; cursor: pointer;',
+    '  box-shadow: 0 4px 18px rgba(249,109,0,0.45), 0 2px 6px rgba(0,0,0,0.12);',
+    '  z-index: 9999; display: flex; align-items: center; justify-content: center;',
+    '  transition: transform 0.25s, box-shadow 0.25s;',
+    '  animation: kg-pulse 3.5s ease-in-out infinite;',
+    '}',
+    '#kg-fab:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(249,109,0,0.55); animation: none; }',
+    '#kg-fab svg { width: 27px; height: 27px; fill: #fff; }',
+    '@keyframes kg-pulse {',
+    '  0%,100% { box-shadow: 0 4px 18px rgba(249,109,0,0.45), 0 0 0 0 rgba(249,109,0,0.25); }',
+    '  50%     { box-shadow: 0 4px 18px rgba(249,109,0,0.45), 0 0 0 11px rgba(249,109,0,0); }',
+    '}',
+
+    /* === Panel === */
+    '#kg-panel {',
+    '  position: fixed; bottom: 102px; right: 28px;',
+    '  width: 330px;',
+    '  background: #f5f9f7; border-radius: 22px;',
+    '  box-shadow: 0 16px 48px rgba(30,60,50,0.16), 0 2px 10px rgba(30,60,50,0.08);',
+    '  z-index: 9998; display: none; flex-direction: column;',
+    '  overflow: hidden; font-family: Roboto, sans-serif;',
+    '  opacity: 0; transform: translateY(18px);',
+    '  transition: opacity 0.3s ease, transform 0.3s ease;',
+    '}',
+    '#kg-panel.kg-open { display: flex; opacity: 1; transform: translateY(0); }',
+
+    /* === Header === */
+    '#kg-hdr {',
+    '  background: linear-gradient(135deg, #234d42 0%, #3a7566 100%);',
+    '  color: #fff; padding: 15px 16px;',
+    '  display: flex; align-items: center; gap: 12px; flex-shrink: 0;',
+    '}',
+    '#kg-avatar { position: relative; flex-shrink: 0; }',
+    '#kg-hdr img {',
+    '  width: 40px; height: 40px; border-radius: 50%;',
+    '  object-fit: cover; border: 2px solid rgba(255,255,255,0.35);',
+    '}',
+    '#kg-dot {',
+    '  position: absolute; bottom: 1px; right: 1px;',
+    '  width: 11px; height: 11px; border-radius: 50%;',
+    '  background: #6ee7b7; border: 2px solid #234d42;',
+    '  animation: kg-dot-pulse 2.8s ease-in-out infinite;',
+    '}',
+    '@keyframes kg-dot-pulse {',
+    '  0%,100% { opacity: 1; transform: scale(1); }',
+    '  50%     { opacity: 0.6; transform: scale(0.88); }',
+    '}',
+    '#kg-hdr-text { flex: 1; }',
+    '#kg-hdr-name { font-weight: 600; font-size: 14px; letter-spacing: 0.2px; }',
+    '#kg-hdr-sub  { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }',
+    '#kg-x {',
+    '  background: rgba(255,255,255,0.12); border: none; color: #fff;',
+    '  cursor: pointer; width: 30px; height: 30px; border-radius: 50%;',
+    '  display: flex; align-items: center; justify-content: center;',
+    '  font-size: 19px; line-height: 1; padding: 0;',
+    '  transition: background 0.2s; flex-shrink: 0;',
+    '}',
+    '#kg-x:hover { background: rgba(255,255,255,0.25); }',
+
+    /* === Messages area === */
+    '#kg-msgs {',
+    '  flex: 1; overflow-y: auto; padding: 18px 14px 10px;',
+    '  display: flex; flex-direction: column; gap: 12px;',
+    '  max-height: 320px;',
+    '  scrollbar-width: thin; scrollbar-color: #b5d4ca transparent;',
+    '}',
+    '#kg-msgs::-webkit-scrollbar { width: 4px; }',
+    '#kg-msgs::-webkit-scrollbar-track { background: transparent; }',
+    '#kg-msgs::-webkit-scrollbar-thumb { background: #b5d4ca; border-radius: 4px; }',
+
+    /* === Message bubbles === */
+    '.kg-m {',
+    '  max-width: 84%; padding: 11px 15px;',
+    '  border-radius: 18px; font-size: 13.5px; line-height: 1.65;',
+    '  animation: kg-fadein 0.28s ease;',
+    '}',
+    '@keyframes kg-fadein {',
+    '  from { opacity: 0; transform: translateY(7px); }',
+    '  to   { opacity: 1; transform: translateY(0); }',
+    '}',
+    '.kg-m.kg-bot {',
+    '  background: #ffffff; color: #253d35;',
+    '  align-self: flex-start; border-bottom-left-radius: 5px;',
+    '  box-shadow: 0 2px 10px rgba(35,77,66,0.09);',
+    '}',
+    '.kg-m.kg-usr {',
+    '  background: linear-gradient(135deg, #F96D00, #d95e00);',
+    '  color: #fff; align-self: flex-end; border-bottom-right-radius: 5px;',
+    '  box-shadow: 0 2px 10px rgba(249,109,0,0.28);',
+    '}',
+
+    /* === Typing indicator === */
+    '#kg-typing {',
+    '  display: flex; gap: 5px; align-items: center;',
+    '  padding: 12px 16px; background: #fff;',
+    '  border-radius: 18px; border-bottom-left-radius: 5px;',
+    '  align-self: flex-start;',
+    '  box-shadow: 0 2px 10px rgba(35,77,66,0.09);',
+    '  animation: kg-fadein 0.28s ease;',
+    '}',
+    '#kg-typing span {',
+    '  width: 7px; height: 7px; background: #8abfb2;',
+    '  border-radius: 50%; animation: kg-b 1.4s ease-in-out infinite;',
+    '}',
+    '#kg-typing span:nth-child(2) { animation-delay: 0.22s; }',
+    '#kg-typing span:nth-child(3) { animation-delay: 0.44s; }',
+    '@keyframes kg-b {',
+    '  0%,60%,100% { transform: translateY(0); opacity: 0.5; }',
+    '  30% { transform: translateY(-7px); opacity: 1; }',
+    '}',
+
+    /* === Quick reply chips === */
+    '#kg-chips { padding: 4px 14px 10px; display: flex; flex-wrap: wrap; gap: 7px; }',
+    '.kg-chip {',
+    '  background: #fff; border: 1.5px solid #7ab5a8;',
+    '  color: #2c6b5a; border-radius: 20px;',
+    '  padding: 6px 13px; font-size: 12px; cursor: pointer;',
+    '  transition: all 0.2s; font-family: inherit;',
+    '  box-shadow: 0 1px 4px rgba(35,77,66,0.07);',
+    '}',
+    '.kg-chip:hover { background: #3a7566; color: #fff; border-color: #3a7566; }',
+
+    /* === Input row === */
+    '#kg-row {',
+    '  display: flex; padding: 10px 12px 14px; gap: 8px;',
+    '  background: #fff; border-top: 1px solid #deeee9; flex-shrink: 0;',
+    '}',
+    '#kg-inp {',
+    '  flex: 1; border: 1.5px solid #c0d9d1; border-radius: 22px;',
+    '  padding: 9px 16px; font-size: 13px; outline: none;',
+    '  font-family: inherit; background: #f5f9f7; color: #253d35;',
+    '  transition: border-color 0.2s, background 0.2s;',
+    '}',
+    '#kg-inp:focus { border-color: #3a7566; background: #fff; }',
+    '#kg-inp::placeholder { color: #9bbdb5; }',
+    '#kg-btn {',
+    '  width: 38px; height: 38px;',
+    '  background: linear-gradient(135deg, #3a7566, #234d42);',
+    '  border: none; border-radius: 50%; cursor: pointer;',
+    '  display: flex; align-items: center; justify-content: center;',
+    '  flex-shrink: 0; transition: transform 0.2s, opacity 0.2s;',
+    '  box-shadow: 0 2px 8px rgba(35,77,66,0.3);',
+    '}',
+    '#kg-btn:hover { transform: scale(1.08); }',
+    '#kg-btn svg { width: 16px; height: 16px; fill: #fff; }',
+    '#kg-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }',
+
+    /* === Mobile === */
+    '@media (max-width: 420px) {',
+    '  #kg-panel { width: calc(100vw - 24px); right: 12px; bottom: 88px; }',
+    '  #kg-fab   { right: 16px; bottom: 16px; }',
+    '}'
+  ].join('\n');
+
+  /* ------------------------------------------------------------------ */
+  /* DOM                                                                  */
+  /* ------------------------------------------------------------------ */
 
   function buildUI() {
     var s = document.createElement('style');
@@ -116,13 +190,16 @@
     var panel = document.createElement('div');
     panel.id = 'kg-panel';
     panel.setAttribute('role', 'dialog');
-    panel.setAttribute('aria-label', 'AI Βοηθός');
+    panel.setAttribute('aria-label', 'AI Βοηθός Κλήμης Γιαμουρίδης');
     panel.innerHTML =
       '<div id="kg-hdr">' +
-        '<img src="images/logo_50x50.png" alt="Κλήμης Γιαμουρίδης">' +
+        '<div id="kg-avatar">' +
+          '<img src="images/logo_50x50.png" alt="Κλήμης Γιαμουρίδης">' +
+          '<span id="kg-dot"></span>' +
+        '</div>' +
         '<div id="kg-hdr-text">' +
-          '<div id="kg-hdr-name">AI Βοηθός</div>' +
-          '<div id="kg-hdr-sub">Κλήμης Γιαμουρίδης, Ψυχολόγος</div>' +
+          '<div id="kg-hdr-name">Βοηθός Κλήμη Γιαμουρίδη</div>' +
+          '<div id="kg-hdr-sub">Ψυχολόγος Θεσσαλονίκη · Διαθέσιμος</div>' +
         '</div>' +
         '<button id="kg-x" aria-label="Κλείσιμο">&times;</button>' +
       '</div>' +
@@ -135,16 +212,20 @@
     document.body.appendChild(panel);
   }
 
+  /* ------------------------------------------------------------------ */
+  /* Logic                                                                */
+  /* ------------------------------------------------------------------ */
+
   function init() {
     buildUI();
 
-    var panel   = document.getElementById('kg-panel');
-    var msgs    = document.getElementById('kg-msgs');
-    var inp     = document.getElementById('kg-inp');
-    var btn     = document.getElementById('kg-btn');
-    var chips   = document.getElementById('kg-chips');
-    var fab     = document.getElementById('kg-fab');
-    var closeX  = document.getElementById('kg-x');
+    var panel  = document.getElementById('kg-panel');
+    var msgs   = document.getElementById('kg-msgs');
+    var inp    = document.getElementById('kg-inp');
+    var btn    = document.getElementById('kg-btn');
+    var chips  = document.getElementById('kg-chips');
+    var fab    = document.getElementById('kg-fab');
+    var closeX = document.getElementById('kg-x');
     var history = [];
     var opened  = false;
 
@@ -155,7 +236,7 @@
         addMsg('bot', WELCOME);
         showChips();
       }
-      if (opened) inp.focus();
+      if (opened) { setTimeout(function() { inp.focus(); }, 320); }
     }
 
     function addMsg(who, text) {
@@ -203,8 +284,6 @@
       history.push({ role: 'user', content: text });
       showTyping();
 
-      var payload = JSON.stringify({ message: text, history: history.slice(-8) });
-
       var xhr = new XMLHttpRequest();
       xhr.open('POST', WORKER_URL, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
@@ -225,7 +304,7 @@
         addMsg('bot', 'Δεν ήταν δυνατή η σύνδεση. Καλέστε στο +30 69 48 071 449.');
         btn.disabled = false;
       };
-      xhr.send(payload);
+      xhr.send(JSON.stringify({ message: text, history: history.slice(-8) }));
     }
 
     fab.addEventListener('click', toggle);
