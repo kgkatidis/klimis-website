@@ -28,6 +28,7 @@ jobs:
       - name: Generate weekly blog post
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
         run: python scripts/generate_post.py
 
       - name: Commit and push new post

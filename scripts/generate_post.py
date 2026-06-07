@@ -145,7 +145,7 @@ def generate_article(topic: str, client: anthropic.Anthropic) -> dict:
 # HTML builders
 # ---------------------------------------------------------------------------
 
-def build_article_html(article: dict, filename: str, date_str: str, image_num: int) -> str:
+def build_article_html(article: dict, filename: str, date_str: str, img_src: str) -> str:
     title       = article["title"]
     meta_desc   = article["meta_description"]
     keywords    = article["keywords"]
@@ -153,9 +153,9 @@ def build_article_html(article: dict, filename: str, date_str: str, image_num: i
     tags        = article.get("tags", [])
 
     d = datetime.strptime(date_str, "%Y-%m-%d")
-    full_date   = f"{d.day} {GREEK_MONTHS[d.month]} {d.year}"
     tags_html   = "\n".join(f'<a href="blog.html" class="tag-cloud-link">{t}</a>' for t in tags)
     canonical   = f"https://www.klimis-giamouridis.gr/{filename}"
+    full_img    = f"https://www.klimis-giamouridis.gr/{img_src}"
 
     jsonld = json.dumps({
         "@context": "https://schema.org",
@@ -174,7 +174,7 @@ def build_article_html(article: dict, filename: str, date_str: str, image_num: i
             "url": "https://www.klimis-giamouridis.gr/"
         },
         "url": canonical,
-        "image": f"https://www.klimis-giamouridis.gr/images/image_{image_num}.jpg",
+        "image": full_img,
         "inLanguage": "el-GR"
     }, ensure_ascii=False, indent=2)
 
@@ -278,7 +278,7 @@ def build_article_html(article: dict, filename: str, date_str: str, image_num: i
         <div class="container">
           <div class="row">
             <article class="col-lg-8 ftco-animate">
-              <p><img src="images/image_{image_num}.jpg" alt="{title}" class="img-fluid" loading="lazy"></p>
+              <p><img src="{img_src}" alt="{title}" class="img-fluid" loading="lazy"></p>
 
               {body_html}
 
@@ -405,7 +405,7 @@ def build_article_html(article: dict, filename: str, date_str: str, image_num: i
 </html>"""
 
 
-def build_blog_card(title: str, excerpt: str, filename: str, date_str: str, image_num: int) -> str:
+def build_blog_card(title: str, excerpt: str, filename: str, date_str: str, img_src: str) -> str:
     d = datetime.strptime(date_str, "%Y-%m-%d")
     day   = f"{d.day:02d}"
     month = GREEK_MONTHS[d.month]
@@ -415,7 +415,7 @@ def build_blog_card(title: str, excerpt: str, filename: str, date_str: str, imag
             <div class="col-md-4 d-flex ftco-animate">
               <div class="blog-entry justify-content-end">
                 <div class="text text-center">
-                  <a href="{filename}" class="block-20 img" style="background-image: url('images/image_{image_num}.jpg');" aria-label="{title}"></a>
+                  <a href="{filename}" class="block-20 img" style="background-image: url('{img_src}');" aria-label="{title}"></a>
                   <div class="meta text-center mb-2 d-flex align-items-center justify-content-center">
                     <div>
                       <span class="day">{day}</span>
@@ -461,13 +461,41 @@ def update_sitemap(sitemap_path: Path, filename: str, date_str: str):
 # Main
 # ---------------------------------------------------------------------------
 
+def fetch_unsplash_image(slug: str, images_dir: Path) -> str:
+    """Download a random psychology image from Unsplash. Returns relative path or None."""
+    access_key = os.environ.get("UNSPLASH_ACCESS_KEY")
+    if not access_key:
+        return None
+
+    import urllib.request
+    import urllib.parse
+
+    query = urllib.parse.quote("psychology therapy calm mindfulness")
+    api_url = (
+        f"https://api.unsplash.com/photos/random"
+        f"?query={query}&orientation=landscape&client_id={access_key}"
+    )
+    try:
+        req = urllib.request.Request(api_url, headers={"Accept-Version": "v1"})
+        resp = urllib.request.urlopen(req, timeout=15)
+        data = json.loads(resp.read())
+        image_url = data["urls"]["regular"]  # ~1080px wide
+        img_filename = f"blog-img-{slug}.jpg"
+        urllib.request.urlretrieve(image_url, images_dir / img_filename)
+        print(f"Εικόνα Unsplash: {img_filename}")
+        return f"images/{img_filename}"
+    except Exception as e:
+        print(f"Unsplash απέτυχε ({e}) — χρησιμοποιείται τοπική εικόνα")
+        return None
+
+
 def main():
     root       = Path(__file__).parent.parent
     state_file = Path(__file__).parent / "post_state.json"
 
     state     = load_state(state_file)
     topic_idx = state["topic_index"] % len(TOPICS)
-    image_num = state["image_index"]  # 1-6
+    image_num = state["image_index"]  # 1-6 fallback
     topic     = TOPICS[topic_idx]
     today     = datetime.now().strftime("%Y-%m-%d")
 
@@ -482,9 +510,18 @@ def main():
 
     print(f"Αρχείο: {filename}")
 
+    # Try Unsplash first, fall back to local cycling images
+    unsplash_path = fetch_unsplash_image(f"{slug}-{date_tag}", root / "images")
+    if unsplash_path:
+        img_src = unsplash_path
+        next_image_num = image_num  # don't advance counter when using Unsplash
+    else:
+        img_src = f"images/image_{image_num}.jpg"
+        next_image_num = (image_num % 6) + 1
+
     # Write article page
     (root / filename).write_text(
-        build_article_html(article, filename, today, image_num),
+        build_article_html(article, filename, today, img_src),
         encoding='utf-8'
     )
     print(f"Γράφτηκε: {filename}")
@@ -492,7 +529,7 @@ def main():
     # Prepend card to blog listing
     update_blog_html(
         root / "blog.html",
-        build_blog_card(article["title"], article["excerpt"], filename, today, image_num)
+        build_blog_card(article["title"], article["excerpt"], filename, today, img_src)
     )
     print("Ενημερώθηκε: blog.html")
 
@@ -502,7 +539,7 @@ def main():
 
     # Advance state
     state["topic_index"] = topic_idx + 1
-    state["image_index"] = (image_num % 6) + 1  # cycles 1→2→…→6→1
+    state["image_index"] = next_image_num
     state["post_count"]  = state.get("post_count", 0) + 1
     save_state(state_file, state)
 
