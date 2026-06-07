@@ -189,6 +189,8 @@ def build_article_html(article: dict, filename: str, date_str: str, img_src: str
 <html lang="el">
   <head>
     <meta charset="utf-8">
+    <link rel="icon" href="images/logo_30x30.png" type="image/png">
+    <link rel="apple-touch-icon" href="images/logo_50x50.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{title} — Κλήμης Γιαμουρίδης</title>
     <meta name="description" content="{meta_desc}">
@@ -408,6 +410,7 @@ def build_article_html(article: dict, filename: str, date_str: str, img_src: str
     <script src="js/scrollax.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/chatbot.js"></script>
+    <script src="js/widgets.js"></script>
   </body>
 </html>"""
 

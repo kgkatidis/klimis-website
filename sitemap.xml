@@ -54,6 +54,9 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.klimis-giamouridis.gr/privacy.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
     <loc>https://www.klimis-giamouridis.gr/blog-pos-na-milate-se-paidia-gia-ta-synaisthimata-toys-20260607.html</loc>
     <lastmod>2026-06-07</lastmod>
     <changefreq>monthly</changefreq>
