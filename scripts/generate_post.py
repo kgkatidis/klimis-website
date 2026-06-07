@@ -400,6 +400,7 @@ def build_article_html(article: dict, filename: str, date_str: str, image_num: i
     <script src="js/jquery.animateNumber.min.js"></script>
     <script src="js/scrollax.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/chatbot.js"></script>
   </body>
 </html>"""
 
