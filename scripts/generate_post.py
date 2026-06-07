@@ -195,7 +195,7 @@ def build_article_html(article: dict, filename: str, date_str: str, img_src: str
     <meta property="og:description" content="{meta_desc}">
     <meta property="og:url" content="{canonical}">
     <meta property="og:site_name" content="Κλήμης Γιαμουρίδης">
-    <meta property="og:image" content="https://www.klimis-giamouridis.gr/images/image_{image_num}.jpg">
+    <meta property="og:image" content="{full_img}">
     <meta property="article:published_time" content="{date_str}">
     <script type="application/ld+json">
 {jsonld}
@@ -463,7 +463,7 @@ def update_sitemap(sitemap_path: Path, filename: str, date_str: str):
 
 def fetch_unsplash_image(slug: str, images_dir: Path) -> str:
     """Download a random psychology image from Unsplash. Returns relative path or None."""
-    access_key = os.environ.get("UNSPLASH_ACCESS_KEY")
+    access_key = os.environ.get("UNSPLASH_ACCESS_KEY", "").strip()
     if not access_key:
         return None
 
