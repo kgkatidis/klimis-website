@@ -5,7 +5,7 @@
      CONFIGURATION — fill in after setup
      ═══════════════════════════════════════════════════════════ */
   var GA_ID        = 'G-6G9VV14V5E';           // Google Analytics Measurement ID
-  var CALENDLY_URL = 'https://calendly.com/klimis-giamouridis'; // Calendly URL
+  var CALENDLY_URL = 'https://calendly.com/kgkatidis/60min';    // Calendly URL
   var WHATSAPP_NUM = '306948071449';
   var WHATSAPP_MSG = encodeURIComponent('Γεια σας, θα ήθελα να κλείσω ένα ραντεβού.');
 
@@ -155,9 +155,6 @@
      4. CALENDLY — popup για "Κλείσε ραντεβού" buttons
      ═══════════════════════════════════════════════════════════ */
   function initCalendly() {
-    if (CALENDLY_URL.indexOf('PLACEHOLDER') !== -1) return;
-
-    // Load Calendly widget CSS + JS
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://assets.calendly.com/assets/external/widget.css';
@@ -166,19 +163,16 @@
     var script = document.createElement('script');
     script.src = 'https://assets.calendly.com/assets/external/widget.js';
     script.async = true;
+    script.onload = function () {
+      Calendly.initBadgeWidget({
+        url: CALENDLY_URL,
+        text: 'Κλείσε Ραντεβού',
+        color: '#0069ff',
+        textColor: '#ffffff',
+        branding: true
+      });
+    };
     document.head.appendChild(script);
-
-    // Wire up any link/button with data-calendly attribute
-    document.addEventListener('click', function (e) {
-      var el = e.target.closest('[data-calendly]');
-      if (!el) return;
-      e.preventDefault();
-      if (window.Calendly) {
-        Calendly.initPopupWidget({ url: CALENDLY_URL });
-      } else {
-        window.open(CALENDLY_URL, '_blank');
-      }
-    });
   }
 
   /* ═══════════════════════════════════════════════════════════
