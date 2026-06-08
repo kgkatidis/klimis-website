@@ -1,63 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.klimis-giamouridis.gr/</loc>
+    <loc>https://www.klimisgiamouridis.gr/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.klimis-giamouridis.gr/about.html</loc>
+    <loc>https://www.klimisgiamouridis.gr/about.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.klimis-giamouridis.gr/services.html</loc>
+    <loc>https://www.klimisgiamouridis.gr/services.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.klimis-giamouridis.gr/office.html</loc>
+    <loc>https://www.klimisgiamouridis.gr/office.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.klimis-giamouridis.gr/contact.html</loc>
+    <loc>https://www.klimisgiamouridis.gr/contact.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.klimis-giamouridis.gr/blog.html</loc>
+    <loc>https://www.klimisgiamouridis.gr/blog.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.klimis-giamouridis.gr/blog-single.html</loc>
+    <loc>https://www.klimisgiamouridis.gr/blog-single.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.klimis-giamouridis.gr/blog-pos-na-diacheiristeite-to-ergasiako-stres-praktikes-sym-20260608.html</loc>
+    <loc>https://www.klimisgiamouridis.gr/blog-pos-na-diacheiristeite-to-ergasiako-stres-praktikes-sym-20260608.html</loc>
     <lastmod>2026-06-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.klimis-giamouridis.gr/blog-aytosymponia-i-dynami-tis-symponias-pros-ton-eayto-20260607.html</loc>
+    <loc>https://www.klimisgiamouridis.gr/blog-aytosymponia-i-dynami-tis-symponias-pros-ton-eayto-20260607.html</loc>
     <lastmod>2026-06-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.klimis-giamouridis.gr/blog-ypnos-kai-psychiki-ygeia-i-syndesi-poy-agnooyme-20260607.html</loc>
+    <loc>https://www.klimisgiamouridis.gr/blog-ypnos-kai-psychiki-ygeia-i-syndesi-poy-agnooyme-20260607.html</loc>
     <lastmod>2026-06-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.klimis-giamouridis.gr/privacy.html</loc>
+    <loc>https://www.klimisgiamouridis.gr/privacy.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
-    <loc>https://www.klimis-giamouridis.gr/blog-pos-na-milate-se-paidia-gia-ta-synaisthimata-toys-20260607.html</loc>
+  </url>
+  <url>
+    <loc>https://www.klimisgiamouridis.gr/blog-pos-na-milate-se-paidia-gia-ta-synaisthimata-toys-20260607.html</loc>
     <lastmod>2026-06-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

@@ -5,7 +5,6 @@
      CONFIGURATION — fill in after setup
      ═══════════════════════════════════════════════════════════ */
   var GA_ID        = 'G-6G9VV14V5E';           // Google Analytics Measurement ID
-  var CALENDLY_URL = 'https://calendly.com/kgkatidis/60min';    // Calendly URL
   var WHATSAPP_NUM = '306948071449';
   var WHATSAPP_MSG = encodeURIComponent('Γεια σας, θα ήθελα να κλείσω ένα ραντεβού.');
 
@@ -152,27 +151,51 @@
   }
 
   /* ═══════════════════════════════════════════════════════════
-     4. CALENDLY — popup για "Κλείσε ραντεβού" buttons
+     4. CALL BUTTON — floating click-to-call
      ═══════════════════════════════════════════════════════════ */
-  function initCalendly() {
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'https://assets.calendly.com/assets/external/widget.css';
-    document.head.appendChild(link);
+  function initCallButton() {
+    var style = document.createElement('style');
+    style.textContent = [
+      '#call-btn {',
+      '  position: fixed; bottom: 28px; right: 28px; z-index: 9999;',
+      '  width: 60px; height: 60px; border-radius: 50%;',
+      '  background: #F96D00;',
+      '  box-shadow: 0 4px 18px rgba(249,109,0,0.45), 0 2px 6px rgba(0,0,0,0.12);',
+      '  display: flex; align-items: center; justify-content: center;',
+      '  text-decoration: none; transition: transform 0.25s, box-shadow 0.25s;',
+      '  animation: call-pulse 3.5s ease-in-out infinite;',
+      '}',
+      '#call-btn:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(249,109,0,0.55); animation: none; }',
+      '#call-btn svg { width: 28px; height: 28px; fill: #fff; }',
+      '@keyframes call-pulse {',
+      '  0%,100% { box-shadow: 0 4px 18px rgba(249,109,0,0.45), 0 0 0 0 rgba(249,109,0,0.3); }',
+      '  50%     { box-shadow: 0 4px 18px rgba(249,109,0,0.45), 0 0 0 11px rgba(249,109,0,0); }',
+      '}',
+      '#call-tooltip {',
+      '  position: fixed; bottom: 38px; right: 98px; z-index: 9999;',
+      '  background: #fff; color: #1a1a1a; font-size: 13px;',
+      '  padding: 8px 14px; border-radius: 20px;',
+      '  box-shadow: 0 4px 16px rgba(0,0,0,0.13);',
+      '  white-space: nowrap; pointer-events: none;',
+      '  opacity: 0; transition: opacity 0.25s;',
+      '  font-family: Roboto, sans-serif;',
+      '}',
+      '#call-btn:hover ~ #call-tooltip { opacity: 1; }',
+      '@media (max-width: 420px) { #call-btn { right: 16px; bottom: 16px; } #call-tooltip { display: none; } }'
+    ].join('\n');
+    document.head.appendChild(style);
 
-    var script = document.createElement('script');
-    script.src = 'https://assets.calendly.com/assets/external/widget.js';
-    script.async = true;
-    script.onload = function () {
-      Calendly.initBadgeWidget({
-        url: CALENDLY_URL,
-        text: 'Κλείσε Ραντεβού',
-        color: '#0069ff',
-        textColor: '#ffffff',
-        branding: true
-      });
-    };
-    document.head.appendChild(script);
+    var btn = document.createElement('a');
+    btn.id = 'call-btn';
+    btn.href = 'tel:+306948071449';
+    btn.setAttribute('aria-label', 'Καλέστε τον Κλήμη Γιαμουρίδη');
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>';
+    document.body.appendChild(btn);
+
+    var tooltip = document.createElement('div');
+    tooltip.id = 'call-tooltip';
+    tooltip.textContent = 'Καλέστε τώρα';
+    document.body.appendChild(tooltip);
   }
 
   /* ═══════════════════════════════════════════════════════════
@@ -181,7 +204,7 @@
   function run() {
     initWhatsApp();
     initCookieBanner();
-    initCalendly();
+    initCallButton();
   }
 
   if (document.readyState === 'loading') {
