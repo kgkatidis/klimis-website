@@ -192,7 +192,7 @@ def build_article_html(article: dict, filename: str, date_str: str, img_src: str
     <link rel="icon" href="images/logo_30x30.png" type="image/png">
     <link rel="apple-touch-icon" href="images/logo_50x50.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{title} — Κλήμης Γιαμουρίδης</title>
+    <title>{title}</title>
     <meta name="description" content="{meta_desc}">
     <meta name="keywords" content="{keywords}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
