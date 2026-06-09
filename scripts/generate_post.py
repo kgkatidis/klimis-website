@@ -298,12 +298,8 @@ def build_article_html(article: dict, filename: str, date_str: str, img_src: str
               </div>
 
               <div class="about-author d-flex p-4 bg-light">
-                <div class="bio mr-5">
-                  <img src="images/about-1.jpg" alt="Κλήμης Γιαμουρίδης" class="img-fluid mb-4" loading="lazy" style="max-width:80px; border-radius:50%;">
-                </div>
                 <div class="desc">
-                  <h3>Κλήμης Γιαμουρίδης</h3>
-                  <p>Ειδικευμένος Γνωστικός Συμπεριφορικός Ψυχολόγος (MSc) — Θεσσαλονίκη. Πιστοποιημένος από την EABCT. Εξειδίκευση σε ΓΣΘ, EMDR και MMPI-2.</p>
+                  <p><em>AI generated article</em></p>
                 </div>
               </div>
             </article>
