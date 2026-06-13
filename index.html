@@ -61,6 +61,32 @@
       /* Ensure iframe map has minimum height */
       .map-embed { min-height: 260px; width: 100%; border: 0; }
 
+      /* Hero heading hierarchy */
+      .hero-eyebrow {
+        display: inline-block;
+        font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em;
+        text-transform: uppercase; color: #2c6fa8;
+        margin-bottom: 6px;
+      }
+      h1#about-heading {
+        font-size: 0.78rem !important; font-weight: 600 !important;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        color: #2c6fa8 !important; margin: 0 0 4px !important;
+        line-height: 1;
+      }
+      .hero-name {
+        display: block;
+        font-size: clamp(1.9rem, 4vw, 2.6rem);
+        font-weight: 800; letter-spacing: -0.01em;
+        color: #0f1f35; line-height: 1.1;
+        margin-bottom: 4px;
+      }
+      .hero-title {
+        display: block;
+        font-size: 1rem; font-weight: 400; color: #4a5568;
+        margin-bottom: 16px;
+      }
+
       /* Conditions tags */
       .conditions-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 20px; }
       .ctag {
@@ -246,7 +272,10 @@
           <div class="row wrap-about px-md-5 ftco-animate py-5 bg-light" aria-labelledby="about-heading">
             <div class="col-md-6">
               <h1 id="about-heading">Ψυχολόγος στη Θεσσαλονίκη</h1>
-              <h2>Κλήμης Γιαμουρίδης — Γνωστικός Συμπεριφορικός Ψυχοθεραπευτής (CBT)</h2>
+              <h2 style="margin:0; font-weight:inherit; font-size:inherit; line-height:inherit;">
+                <span class="hero-name">Κλήμης Γιαμουρίδης</span>
+                <span class="hero-title">Γνωστικός Συμπεριφορικός Ψυχοθεραπευτής (CBT)</span>
+              </h2>
               <p>Ψυχολόγος στη Θεσσαλονίκη με εξειδίκευση στη <strong>Γνωστική Συμπεριφορική Ψυχοθεραπεία (CBT)</strong> και <strong>EMDR</strong>. Απόφοιτος του Τμήματος Ψυχολογίας του Πανεπιστημίου Κρήτης, πιστοποιημένος από την <strong>EABCT</strong>.</p>
               <p style="margin-bottom:6px; color:#555; font-size:0.9rem;">Μπορεί να σε βοηθήσει αν αντιμετωπίζεις:</p>
               <div class="conditions-wrap">
