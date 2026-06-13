@@ -32,24 +32,33 @@ a     { transition: color 0.2s ease, opacity 0.2s ease; }
   box-shadow: 0 8px 28px rgba(44, 111, 168, 0.42) !important;
 }
 
-/* ── Navbar links — animated underline ───────────────────────── */
-.ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
-  position: relative;
+/* ── Navbar links — animated underline (desktop only) ────────── */
+@media (min-width: 992px) {
+  .ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
+    position: relative;
+  }
+  .ftco-navbar-light .navbar-nav > .nav-item > .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 8px; left: 20px; right: 20px;
+    height: 2px;
+    background: #2c6fa8;
+    border-radius: 1px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.25s ease;
+  }
+  .ftco-navbar-light .navbar-nav > .nav-item > .nav-link:hover::after,
+  .ftco-navbar-light .navbar-nav > .nav-item.active > .nav-link::after {
+    transform: scaleX(1);
+  }
 }
-.ftco-navbar-light .navbar-nav > .nav-item > .nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 8px; left: 20px; right: 20px;
-  height: 2px;
-  background: #2c6fa8;
-  border-radius: 1px;
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.25s ease;
-}
-.ftco-navbar-light .navbar-nav > .nav-item > .nav-link:hover::after,
-.ftco-navbar-light .navbar-nav > .nav-item.active > .nav-link::after {
-  transform: scaleX(1);
+
+/* ── Navbar toggler — dark lines on white mobile navbar ─────── */
+@media (max-width: 991.98px) {
+  .ftco-navbar-light .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(0,0,0,0.6)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+  }
 }
 
 /* ── Section headings ────────────────────────────────────────── */
