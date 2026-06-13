@@ -1,0 +1,218 @@
+/* ═══════════════════════════════════════════════════════════════
+   magic.css — visual layer on top of the base theme
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Global ──────────────────────────────────────────────────── */
+html  { scroll-behavior: smooth; }
+body  { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+a     { transition: color 0.2s ease, opacity 0.2s ease; }
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.btn-primary {
+  background: linear-gradient(135deg, #2c6fa8 0%, #1a5592 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 16px rgba(44, 111, 168, 0.32) !important;
+  transition: transform 0.22s ease, box-shadow 0.22s ease !important;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -70%;
+  width: 40%; height: 200%;
+  background: rgba(255, 255, 255, 0.18);
+  transform: skewX(-20deg);
+  transition: left 0.55s ease;
+  pointer-events: none;
+}
+.btn-primary:hover::after { left: 140%; }
+.btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 28px rgba(44, 111, 168, 0.42) !important;
+}
+
+/* ── Navbar links — animated underline ───────────────────────── */
+.ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
+  position: relative;
+}
+.ftco-navbar-light .navbar-nav > .nav-item > .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 8px; left: 20px; right: 20px;
+  height: 2px;
+  background: #2c6fa8;
+  border-radius: 1px;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+.ftco-navbar-light .navbar-nav > .nav-item > .nav-link:hover::after,
+.ftco-navbar-light .navbar-nav > .nav-item.active > .nav-link::after {
+  transform: scaleX(1);
+}
+
+/* ── Section headings ────────────────────────────────────────── */
+.heading-section h2 {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 14px;
+}
+.heading-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 48px; height: 3px;
+  background: linear-gradient(90deg, #2c6fa8, #daedf7);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+.ftco-section:hover .heading-section h2::after { width: 90px; }
+
+/* ── Service cards ───────────────────────────────────────────── */
+.services-2 {
+  border-radius: 14px !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+.services-2:hover {
+  transform: translateY(-10px) !important;
+  box-shadow: 0 22px 48px rgba(44, 111, 168, 0.14) !important;
+}
+.services-2 .icon {
+  transition: background 0.3s ease !important;
+}
+.services-2:hover .icon {
+  background: linear-gradient(135deg, #c8e4f5 0%, #daedf7 100%) !important;
+}
+
+/* ── Blog cards ──────────────────────────────────────────────── */
+.block-20 {
+  overflow: hidden;
+  border-radius: 10px 10px 0 0;
+}
+.ftco-media {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.ftco-media:hover {
+  box-shadow: 0 14px 38px rgba(44, 111, 168, 0.13);
+  transform: translateY(-6px);
+}
+.ftco-media .block-20 .img {
+  transition: transform 0.5s ease;
+}
+.ftco-media:hover .block-20 .img {
+  transform: scale(1.06);
+}
+
+/* ── Testimonial cards ───────────────────────────────────────── */
+.testimony-wrap {
+  border-radius: 14px !important;
+  background: #fff !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
+  transition: box-shadow 0.3s ease, transform 0.3s ease !important;
+  padding: 28px !important;
+}
+.testimony-wrap:hover {
+  box-shadow: 0 14px 40px rgba(44, 111, 168, 0.13) !important;
+  transform: translateY(-5px) !important;
+}
+
+/* ── About / hero image ──────────────────────────────────────── */
+.wrap-about img.img-fluid {
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(44, 111, 168, 0.15);
+  transition: transform 0.45s ease, box-shadow 0.45s ease;
+}
+.wrap-about img.img-fluid:hover {
+  transform: scale(1.025) rotate(0.5deg);
+  box-shadow: 0 20px 56px rgba(44, 111, 168, 0.22);
+}
+
+/* ── bg-light sections — subtle glow ────────────────────────── */
+.bg-light {
+  background-image:
+    radial-gradient(ellipse at 15% 60%, rgba(44, 111, 168, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 20%, rgba(44, 111, 168, 0.04) 0%, transparent 55%) !important;
+}
+
+/* ── Footer heading accent ───────────────────────────────────── */
+.ftco-footer-widget h2 {
+  position: relative;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+.ftco-footer-widget h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 32px; height: 2px;
+  background: #2c6fa8;
+  border-radius: 1px;
+  transition: width 0.3s ease;
+}
+.ftco-footer-widget:hover h2::after { width: 60px; }
+
+/* ── Form inputs ─────────────────────────────────────────────── */
+.form-control {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+.form-control:focus {
+  border-color: #2c6fa8 !important;
+  box-shadow: 0 0 0 3px rgba(44, 111, 168, 0.14) !important;
+}
+
+/* ── Contact / dbox icons ────────────────────────────────────── */
+.dbox .icon {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.dbox:hover .icon {
+  transform: scale(1.1);
+  box-shadow: 0 6px 18px rgba(44, 111, 168, 0.2);
+}
+
+/* ── FAQ items ───────────────────────────────────────────────── */
+#accordion .card {
+  border-radius: 10px !important;
+  overflow: hidden;
+  margin-bottom: 8px !important;
+  border: 1px solid rgba(44, 111, 168, 0.15) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: box-shadow 0.25s ease;
+}
+#accordion .card:hover {
+  box-shadow: 0 6px 20px rgba(44, 111, 168, 0.1);
+}
+#accordion .card-header {
+  border-bottom: none !important;
+}
+#accordion .card-header button {
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+/* ── Scroll-reveal fade-up (for non-waypoint elements) ───────── */
+@keyframes magic-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ftco-section > .container > .row {
+  animation: magic-fade-up 0.6s ease both;
+}
+
+/* ── Map / iframe ────────────────────────────────────────────── */
+iframe {
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  transition: box-shadow 0.3s ease;
+}
+iframe:hover { box-shadow: 0 10px 32px rgba(0,0,0,0.13); }
+
+/* ── Smooth page-wide transitions ────────────────────────────── */
+::selection {
+  background: rgba(44, 111, 168, 0.18);
+  color: #0f1f35;
+}
