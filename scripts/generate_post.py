@@ -106,11 +106,11 @@ def save_state(state_file: Path, state: dict):
 
 
 # ---------------------------------------------------------------------------
-# AI generation
+# AI generation  (Sonnet writer → Haiku reviewer)
 # ---------------------------------------------------------------------------
 
 def generate_article(topic: str, client: anthropic.Anthropic) -> dict:
-    prompt = f"""Γράψε ένα πλήρες άρθρο blog στα ελληνικά για ψυχολόγο στη Θεσσαλονίκη με θέμα: "{topic}"
+    writer_prompt = f"""Γράψε ένα πλήρες άρθρο blog στα ελληνικά για ψυχολόγο στη Θεσσαλονίκη με θέμα: "{topic}"
 
 Επέστρεψε ΜΟΝΟ ένα έγκυρο JSON αντικείμενο. ΠΡΟΣΟΧΗ: Στο body_html ΜΗΝ χρησιμοποιείς διπλά εισαγωγικά (") μέσα σε attributes HTML — χρησιμοποίησε μόνο απλά (') ή αποφύγε τα attributes.
 
@@ -123,29 +123,70 @@ def generate_article(topic: str, client: anthropic.Anthropic) -> dict:
   "body_html": "HTML άρθρο 600+ λέξεων με <h2>, <p>, <ul><li>. Ξεκίνα με <h2>. Χωρίς <html><body><head>. Χωρίς διπλά εισαγωγικά σε attributes."
 }}
 
-Κανόνες:
+Κανόνες περιεχομένου:
 - Επαγγελματική ελληνική, κατανοητή από το κοινό
 - Ζεστός τόνος, χωρίς ιατρικές συνταγές
 - Φυσική χρήση "ψυχολόγος Θεσσαλονίκη" 2-3 φορές
 - Κλείσε με πρόσκληση για τηλεφωνική επικοινωνία
+
+Κανόνες ελληνικής γλώσσας (ΥΠΟΧΡΕΩΤΙΚΟΙ):
+- Συμφωνία γένους: άρθρα, επίθετα και ρήματα να συμφωνούν με το ουσιαστικό (π.χ. "πολλοί άνθρωποι" ΟΧΙ "πολλές άνθρωποι")
+- Μόνο υπαρκτές ελληνικές λέξεις — χωρίς επινοημένες (π.χ. "φλεγμονή" ΟΧΙ "φλόγωση")
+- Μηδέν ξένες λέξεις σε ελληνικό κείμενο — μεταφράζεις ή βάζεις σε παρένθεση (π.χ. ενσυνειδητότητα (mindfulness))
+- Σωστές προστακτικές: "μη διστάσετε" ΟΧΙ "δεν διστάστε", "αφιερώστε" ΟΧΙ "δεδικάστε"
+- Σωστές πτώσεις: "έναν ψυχολόγο" (αιτ.) ΟΧΙ "έναν ψυχολόγος"
 - ΜΟΝΟ JSON, χωρίς backticks"""
 
-    for attempt in range(3):
-        message = client.messages.create(
-            model="claude-haiku-4-5-20251001",
-            max_tokens=4096,
-            messages=[{"role": "user", "content": prompt}]
-        )
-        raw = message.content[0].text.strip()
-        raw = re.sub(r'^```(?:json)?\s*', '', raw)
+    def parse_raw(raw: str) -> dict:
+        raw = re.sub(r'^```(?:json)?\s*', '', raw.strip())
         raw = re.sub(r'\s*```$', '', raw)
+        return json.loads(raw)
+
+    # --- Βήμα 1: Sonnet γράφει το άρθρο ---
+    article = None
+    for attempt in range(3):
+        msg = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=4096,
+            messages=[{"role": "user", "content": writer_prompt}]
+        )
         try:
-            return json.loads(raw)
+            article = parse_raw(msg.content[0].text)
+            break
         except json.JSONDecodeError as e:
-            print(f"JSON parse error (attempt {attempt+1}/3): {e}")
+            print(f"  [Writer] JSON error (attempt {attempt+1}/3): {e}")
             if attempt == 2:
                 raise
-    raise RuntimeError("Αδύνατη η παραγωγή άρθρου μετά από 3 προσπάθειες")
+    print("  [Writer] Sonnet ✓")
+
+    # --- Βήμα 2: Haiku reviewer ελέγχει και διορθώνει ---
+    reviewer_prompt = f"""Είσαι διορθωτής ελληνικού κειμένου για ιστοσελίδα ψυχολόγου.
+
+Ελέγξε το παρακάτω HTML άρθρο για:
+1. Ορθογραφικά λάθη
+2. Συντακτικά λάθη (συμφωνία γένους, πτώσης, αριθμού)
+3. Επινοημένες ή ανύπαρκτες ελληνικές λέξεις
+4. Ξένες λέξεις που διέφυγαν μέσα σε ελληνικό κείμενο
+5. Αδόκιμες εκφράσεις (μεταφρασμένες κατά λέξη από αγγλικά)
+
+Επέστρεψε ΜΟΝΟ το διορθωμένο HTML, χωρίς εξηγήσεις, χωρίς backticks, χωρίς markdown.
+Αν δεν υπάρχουν λάθη, επέστρεψε το HTML αυτούσιο.
+
+=== ΑΡΘΡΟ ΠΡΟΣ ΕΛΕΓΧΟ ===
+{article['body_html']}"""
+
+    review_msg = client.messages.create(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=4096,
+        messages=[{"role": "user", "content": reviewer_prompt}]
+    )
+    reviewed_html = review_msg.content[0].text.strip()
+    reviewed_html = re.sub(r'^```(?:html)?\s*', '', reviewed_html)
+    reviewed_html = re.sub(r'\s*```$', '', reviewed_html)
+    article['body_html'] = reviewed_html
+    print("  [Reviewer] Haiku ✓")
+
+    return article
 
 
 # ---------------------------------------------------------------------------
@@ -297,11 +338,6 @@ def build_article_html(article: dict, filename: str, date_str: str, img_src: str
                 </div>
               </div>
 
-              <div class="about-author d-flex p-4 bg-light">
-                <div class="desc">
-                  <p><em>AI generated article</em></p>
-                </div>
-              </div>
             </article>
 
             <aside class="col-lg-4 sidebar pl-lg-5 ftco-animate">

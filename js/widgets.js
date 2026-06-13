@@ -59,7 +59,55 @@
   }
 
   /* ═══════════════════════════════════════════════════════════
-     2. GOOGLE ANALYTICS 4 (loads only after consent)
+     2. VIBER BUTTON
+     ═══════════════════════════════════════════════════════════ */
+  function initViber() {
+    var style = document.createElement('style');
+    style.textContent = [
+      '#viber-btn {',
+      '  position: fixed; bottom: 100px; left: 28px; z-index: 9999;',
+      '  width: 60px; height: 60px; border-radius: 50%;',
+      '  background: #7360f2;',
+      '  box-shadow: 0 4px 18px rgba(115,96,242,0.45), 0 2px 6px rgba(0,0,0,0.12);',
+      '  display: flex; align-items: center; justify-content: center;',
+      '  text-decoration: none; transition: transform 0.25s, box-shadow 0.25s;',
+      '  animation: viber-pulse 3.5s ease-in-out infinite;',
+      '}',
+      '#viber-btn:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(115,96,242,0.55); animation: none; }',
+      '#viber-btn svg { width: 32px; height: 32px; fill: #fff; }',
+      '@keyframes viber-pulse {',
+      '  0%,100% { box-shadow: 0 4px 18px rgba(115,96,242,0.45), 0 0 0 0 rgba(115,96,242,0.3); }',
+      '  50%     { box-shadow: 0 4px 18px rgba(115,96,242,0.45), 0 0 0 11px rgba(115,96,242,0); }',
+      '}',
+      '#viber-tooltip {',
+      '  position: fixed; bottom: 110px; left: 98px; z-index: 9999;',
+      '  background: #fff; color: #1a1a1a; font-size: 13px;',
+      '  padding: 8px 14px; border-radius: 20px;',
+      '  box-shadow: 0 4px 16px rgba(0,0,0,0.13);',
+      '  white-space: nowrap; pointer-events: none;',
+      '  opacity: 0; transition: opacity 0.25s;',
+      '  font-family: Roboto, sans-serif;',
+      '}',
+      '#viber-btn:hover + #viber-tooltip { opacity: 1; }',
+      '@media (max-width: 420px) { #viber-btn { left: 16px; bottom: 88px; } #viber-tooltip { display: none; } }'
+    ].join('\n');
+    document.head.appendChild(style);
+
+    var btn = document.createElement('a');
+    btn.id = 'viber-btn';
+    btn.href = 'viber://chat?number=%2B306948071449';
+    btn.setAttribute('aria-label', 'Επικοινωνία μέσω Viber');
+    btn.innerHTML = '<svg viewBox="0 0 512 512"><path d="M444 49.9C431.3 38.2 379.9.9 265.3.4c0 0-135.1-8.1-200.9 52.3C27.8 89.3 14.9 143 13.5 209.5c-1.4 66.5-3.1 191.1 116.9 224.9h.1l-.1 51.4s-.8 20.8 12.9 25c16.6 5.2 26.4-10.7 42.3-27.8 8.7-9.4 20.7-23.2 29.8-33.7 82.2 6.9 145.3-8.9 152.5-11.2 16.6-5.4 110.5-17.4 125.7-142 15.8-128.6-7.6-209.8-49.6-246.2zm-86.9 229.1c-3.2 8.3-9.3 15-17.2 19-4.1 2.1-8.6 3.3-13.2 3.6-3.4.2-6.8-.3-9.9-1.5-10.5-3.8-20.4-8.8-29.4-15-9.2-6.3-17.5-13.8-24.6-22.3a122 122 0 01-16.5-29.6c-2.6-7.1-3.9-14.6-3.7-22.1.2-7.2 2.3-14.2 6.1-20.3 3.2-5.2 7.6-9.5 12.9-12.6 2.4-1.4 5.1-2.2 7.9-2.2 2.3 0 4.5.5 6.5 1.5 2 1 3.7 2.5 5 4.3l17.2 24.4c1.4 2 2.1 4.4 2 6.8-.1 2.5-.9 4.9-2.5 6.8l-6.7 8.2c-.9 1.1-1.3 2.5-1.1 3.9.6 3.4 2.9 7.8 6.9 13.4 4 5.7 8.3 10.1 12.9 13.2 3.2 2.1 5.9 2.6 8.1 1.5l8.9-4.7c2.1-1.1 4.5-1.4 6.8-.9 2.3.5 4.4 1.8 5.8 3.7l15.5 21.9c1.3 1.8 2 3.9 2 6.1-.1 2.4-.8 4.8-2.1 6.9zm-24.7-85.6c-1.7-15.8-8.8-29.4-21.1-40.7-12-11-26.5-17.1-43.2-18.2v-15.1c20.5 1.2 38.4 8.7 53.2 22.3 14.9 13.8 23.5 31.1 25.6 51.7h-14.5zm-30.5 0c-1.1-8.8-4.7-16.3-10.9-22.4-6-5.9-13.5-9.4-22.3-10.5v-15c12.4 1.3 23.1 6.2 31.8 14.7 8.9 8.7 14.1 19.4 15.6 32.1l-.4.4-13.8.7zm-29.3 0c-.5-3.9-2.1-7.3-4.8-10-2.7-2.7-6.2-4.3-10.1-4.6v-15.1c7.9.5 14.7 3.5 20.2 9 5.3 5.3 8.4 11.9 9.3 19.8l-14.6.9z"/></svg>';
+    document.body.appendChild(btn);
+
+    var tooltip = document.createElement('div');
+    tooltip.id = 'viber-tooltip';
+    tooltip.textContent = 'Στείλε μήνυμα Viber';
+    document.body.appendChild(tooltip);
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     3. GOOGLE ANALYTICS 4 (loads only after consent)
      ═══════════════════════════════════════════════════════════ */
   function loadGA() {
     if (GA_ID === 'G-XXXXXXXXXX') return; // not configured yet
@@ -99,12 +147,15 @@
       '#kg-cookie {',
       '  position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;',
       '  background: #1e1e2e; color: #e8e8f0;',
-      '  padding: 18px 24px; display: flex; align-items: center;',
-      '  gap: 20px; flex-wrap: wrap;',
+      '  padding: 0;',
       '  box-shadow: 0 -4px 24px rgba(0,0,0,0.25);',
       '  font-family: Roboto, sans-serif; font-size: 13.5px; line-height: 1.55;',
       '}',
-      '#kg-cookie p { margin: 0; flex: 1; min-width: 220px; }',
+      '#kg-cookie-top {',
+      '  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;',
+      '  padding: 16px 24px;',
+      '}',
+      '#kg-cookie-top p { margin: 0; flex: 1; min-width: 220px; }',
       '#kg-cookie a { color: #7ab5a8; text-decoration: underline; }',
       '#kg-cookie-btns { display: flex; gap: 10px; flex-shrink: 0; }',
       '#kg-accept {',
@@ -121,9 +172,17 @@
       '  font-size: 13px; font-family: inherit; transition: color 0.2s;',
       '}',
       '#kg-reject:hover { color: #fff; border-color: #777; }',
+      '#kg-ai-disclosure {',
+      '  border-top: 1px solid rgba(255,255,255,0.08);',
+      '  background: rgba(0,0,0,0.25);',
+      '  padding: 12px 24px;',
+      '  font-size: 11.5px; color: #9090a8; line-height: 1.6;',
+      '}',
+      '#kg-ai-disclosure strong { color: #b8b8d0; }',
       '@media (max-width: 500px) {',
-      '  #kg-cookie { flex-direction: column; text-align: center; }',
+      '  #kg-cookie-top { flex-direction: column; text-align: center; }',
       '  #kg-cookie-btns { justify-content: center; }',
+      '  #kg-ai-disclosure { text-align: left; }',
       '}'
     ].join('\n');
     document.head.appendChild(style);
@@ -131,11 +190,19 @@
     var banner = document.createElement('div');
     banner.id = 'kg-cookie';
     banner.innerHTML =
-      '<p>Χρησιμοποιούμε cookies για ανάλυση επισκεψιμότητας (Google Analytics) ώστε να βελτιώνουμε το περιεχόμενο. ' +
-      'Διαβάστε την <a href="/privacy.html">Πολιτική Απορρήτου</a> μας.</p>' +
-      '<div id="kg-cookie-btns">' +
-        '<button id="kg-accept">Αποδοχή</button>' +
-        '<button id="kg-reject">Μόνο απαραίτητα</button>' +
+      '<div id="kg-cookie-top">' +
+        '<p>Χρησιμοποιούμε cookies για ανάλυση επισκεψιμότητας (Google Analytics) ώστε να βελτιώνουμε το περιεχόμενο. ' +
+        'Διαβάστε την <a href="/privacy.html">Πολιτική Απορρήτου</a> μας.</p>' +
+        '<div id="kg-cookie-btns">' +
+          '<button id="kg-accept">Αποδοχή</button>' +
+          '<button id="kg-reject">Μόνο απαραίτητα</button>' +
+        '</div>' +
+      '</div>' +
+      '<div id="kg-ai-disclosure">' +
+        '<strong>Σημείωση για το περιεχόμενο του Blog:</strong> ' +
+        'Ορισμένα άρθρα του ιστολογίου αυτής της ιστοσελίδας έχουν δημιουργηθεί με τη βοήθεια τεχνητής νοημοσύνης (AI) και αποσκοπούν αποκλειστικά στην παροχή γενικής ψυχοεκπαιδευτικής πληροφόρησης. ' +
+        'Τα άρθρα που <strong>δεν φέρουν την υπογραφή του Ψυχολόγου Κλήμη Γιαμουρίδη</strong> είναι δημιουργήματα τεχνητής νοημοσύνης, είναι απλά ενημερωτικά και <strong>δεν αποτελούν επαγγελματική ψυχολογική γνωμάτευση, διάγνωση ή θεραπευτική σύσταση</strong>. ' +
+        'Αν αντιμετωπίζετε δυσκολίες ψυχικής υγείας, παρακαλούμε να απευθυνθείτε σε εξειδικευμένο επαγγελματία υγείας.' +
       '</div>';
     document.body.appendChild(banner);
 
@@ -203,6 +270,7 @@
      ═══════════════════════════════════════════════════════════ */
   function run() {
     initWhatsApp();
+    initViber();
     initCookieBanner();
     initCallButton();
   }
