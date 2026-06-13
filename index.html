@@ -60,6 +60,32 @@
       footer .ftco-footer-widget a { text-decoration: none; }
       /* Ensure iframe map has minimum height */
       .map-embed { min-height: 260px; width: 100%; border: 0; }
+
+      /* Conditions tags */
+      .conditions-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 20px; }
+      .ctag {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: linear-gradient(135deg, rgba(44,111,168,0.07) 0%, rgba(218,237,247,0.6) 100%);
+        border: 1px solid rgba(44,111,168,0.22);
+        border-radius: 30px;
+        padding: 5px 14px 5px 10px;
+        font-size: 0.875rem; font-weight: 500; color: #1a4a72;
+        letter-spacing: 0.01em;
+        transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+        cursor: default;
+      }
+      .ctag::before {
+        content: '';
+        width: 6px; height: 6px; border-radius: 50%;
+        background: #2c6fa8;
+        opacity: 0.7;
+        flex-shrink: 0;
+      }
+      .ctag:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(44,111,168,0.18);
+        background: linear-gradient(135deg, rgba(44,111,168,0.13) 0%, rgba(218,237,247,0.85) 100%);
+      }
     </style>
 
     <!-- Structured data: LocalBusiness + WebSite + FAQPage -->
@@ -221,7 +247,16 @@
             <div class="col-md-6">
               <h1 id="about-heading">Ψυχολόγος στη Θεσσαλονίκη</h1>
               <h2>Κλήμης Γιαμουρίδης — Γνωστικός Συμπεριφορικός Ψυχοθεραπευτής (CBT)</h2>
-              <p>Ψυχολόγος στη Θεσσαλονίκη με εξειδίκευση στη <strong>Γνωστική Συμπεριφορική Ψυχοθεραπεία (CBT)</strong> και <strong>EMDR</strong>. Απόφοιτος του Τμήματος Ψυχολογίας του Πανεπιστημίου Κρήτης, πιστοποιημένος από την <strong>EABCT</strong>. Παρέχει ψυχοθεραπεία για <em>αγχώδεις διαταραχές</em>,<em> κρίσεις πανικού</em>,<em> ΙΨΔ</em>,<em> κατάθλιψη</em>,<em> τραύμα</em>και<em> δυσκολίες στις διαπροσωπικές σχέσεις</em>.</p>
+              <p>Ψυχολόγος στη Θεσσαλονίκη με εξειδίκευση στη <strong>Γνωστική Συμπεριφορική Ψυχοθεραπεία (CBT)</strong> και <strong>EMDR</strong>. Απόφοιτος του Τμήματος Ψυχολογίας του Πανεπιστημίου Κρήτης, πιστοποιημένος από την <strong>EABCT</strong>.</p>
+              <p style="margin-bottom:6px; color:#555; font-size:0.9rem;">Μπορεί να σε βοηθήσει αν αντιμετωπίζεις:</p>
+              <div class="conditions-wrap">
+                <span class="ctag">Άγχος &amp; αγχώδεις διαταραχές</span>
+                <span class="ctag">Κρίσεις πανικού</span>
+                <span class="ctag">Ιδεοψυχαναγκαστική διαταραχή</span>
+                <span class="ctag">Κατάθλιψη</span>
+                <span class="ctag">Τραύμα &amp; PTSD</span>
+                <span class="ctag">Δυσκολίες σχέσεων</span>
+              </div>
               <p><span class="fa fa-map-marker mr-1" aria-hidden="true"></span> <strong>Γρηγορίου Παλαμά 5</strong> (κάθετος Τσιμισκή), Θεσσαλονίκη — <a href="https://www.google.com/maps/place/Γρηγορίου+Παλαμά+5" target="_blank" rel="noopener noreferrer">δείτε στο χάρτη</a></p>
               <a href="tel:+306948071449" class="btn btn-primary mt-2"><span class="fa fa-phone mr-1" aria-hidden="true"></span> +30 69 48 071 449</a>
             </div>
