@@ -478,7 +478,7 @@ def build_blog_card(title: str, excerpt: str, filename: str, date_str: str, img_
 
 def update_blog_html(blog_path: Path, new_card: str):
     content = blog_path.read_text(encoding='utf-8')
-    marker = '<div class="row d-flex">'
+    marker = '<!-- INSERT-AFTER-PINNED -->'
     idx = content.find(marker)
     if idx == -1:
         raise ValueError("Δεν βρέθηκε το σημείο εισαγωγής στο blog.html")
