@@ -4,7 +4,7 @@
   /* ═══════════════════════════════════════════════════════════
      CONFIGURATION — fill in after setup
      ═══════════════════════════════════════════════════════════ */
-  var GA_ID        = 'G-6G9VV14V5E';           // Google Analytics Measurement ID
+  var GA_ID        = 'G-8RHQ23TV7P';           // Google Analytics Measurement ID
   var WHATSAPP_NUM = '306948071449';
   var WHATSAPP_MSG = encodeURIComponent('Γεια σας, θα ήθελα να κλείσω ένα ραντεβού.');
 
