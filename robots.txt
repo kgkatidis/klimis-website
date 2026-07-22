@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.klimisgiamouridis.gr/sitemap.xml
+Sitemap: https://klimisgiamouridis.gr/sitemap.xml
