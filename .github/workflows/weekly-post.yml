@@ -38,3 +38,10 @@ jobs:
           git add -A
           git commit -m "feat: auto-generate weekly psychology article"
           git push
+
+      - name: Notify Google Search Console
+        env:
+          GSC_SERVICE_ACCOUNT_KEY: ${{ secrets.GSC_SERVICE_ACCOUNT_KEY }}
+        run: |
+          pip install google-auth requests
+          python scripts/submit_sitemap.py
