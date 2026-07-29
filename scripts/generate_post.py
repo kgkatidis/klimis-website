@@ -202,8 +202,8 @@ def build_article_html(article: dict, filename: str, date_str: str, img_src: str
 
     d = datetime.strptime(date_str, "%Y-%m-%d")
     tags_html   = "\n".join(f'<a href="blog.html" class="tag-cloud-link">{t}</a>' for t in tags)
-    canonical   = f"https://www.klimisgiamouridis.gr/{filename}"
-    full_img    = f"https://www.klimisgiamouridis.gr/{img_src}"
+    canonical   = f"https://klimisgiamouridis.gr/{filename}"
+    full_img    = f"https://klimisgiamouridis.gr/{img_src}"
 
     jsonld = json.dumps({
         "@context": "https://schema.org",
@@ -214,12 +214,12 @@ def build_article_html(article: dict, filename: str, date_str: str, img_src: str
         "author": {
             "@type": "Person",
             "name": "Κλήμης Γιαμουρίδης",
-            "url": "https://www.klimisgiamouridis.gr/about.html"
+            "url": "https://klimisgiamouridis.gr/about.html"
         },
         "publisher": {
             "@type": "Organization",
             "name": "Κλήμης Γιαμουρίδης",
-            "url": "https://www.klimisgiamouridis.gr/"
+            "url": "https://klimisgiamouridis.gr/"
         },
         "url": canonical,
         "image": full_img,
@@ -489,7 +489,7 @@ def update_blog_html(blog_path: Path, new_card: str):
 def update_sitemap(sitemap_path: Path, filename: str, date_str: str):
     content = sitemap_path.read_text(encoding='utf-8')
     new_url = f"""  <url>
-    <loc>https://www.klimisgiamouridis.gr/{filename}</loc>
+    <loc>https://klimisgiamouridis.gr/{filename}</loc>
     <lastmod>{date_str}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
